@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                    CustomListAdapter adapter = new CustomListAdapter(MainActivity.this, prod_names, prod_prices, prod_images);
+                    CustomListAdapter adapter = new CustomListAdapter(MainActivity.this, prod_names, prod_prices);
                     ListView list = (ListView) findViewById(android.R.id.list);
                     list.setAdapter(adapter);
 

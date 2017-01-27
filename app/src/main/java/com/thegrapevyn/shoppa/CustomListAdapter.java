@@ -58,7 +58,7 @@ public class CustomListAdapter  extends ArrayAdapter<String> {
 
 
 
-    public CustomListAdapter(MainActivity context, String[] prod_name, String[] prod_price, String[] prod_image) {
+    public CustomListAdapter(MainActivity context, String[] prod_name, String[] prod_price) {
         super(context, R.layout.mylist, prod_name);
         // TODO Auto-generated constructor stub
 
@@ -79,7 +79,7 @@ public class CustomListAdapter  extends ArrayAdapter<String> {
 
         txtTitle.setText(prod_name[position]);
         extratxt.setText("Price: $" + prod_price[position]);
-        imageView.setImageBitmap(DownloadImage("http://192.168.1.2/troi_one/product_images/image1.jpg"));
+        //imageView.setImageBitmap();
 
         //-------------------------------------------------------------------------
 
@@ -90,7 +90,7 @@ public class CustomListAdapter  extends ArrayAdapter<String> {
 
         return rowView;
     }
-
+/*
     private Bitmap DownloadImage(String s) {
         Bitmap bitmap = null;
         InputStream in = null;
@@ -106,5 +106,5 @@ public class CustomListAdapter  extends ArrayAdapter<String> {
         return bitmap;
     }
 
-
+*/
 }
