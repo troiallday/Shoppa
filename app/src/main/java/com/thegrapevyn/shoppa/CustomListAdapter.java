@@ -1,15 +1,13 @@
 package com.thegrapevyn.shoppa;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,17 +19,16 @@ import java.net.URLConnection;
  * Created by TapiwaLouis on 25/1/2017.
  */
 
-public class CustomListAdapter  extends ArrayAdapter<String> {
+public class CustomListAdapter extends ArrayAdapter<String> {
 
-    private InputStream OpenHttpConnection(String urlString) throws IOException
-    {
+    private InputStream OpenHttpConnection(String urlString) throws IOException {
         InputStream in = null;
         int response = -1;
         URL url = new URL(urlString);
         URLConnection conn = url.openConnection();
         if (!(conn instanceof HttpURLConnection))
             throw new IOException("Not an HTTP connection");
-        try{
+        try {
             HttpURLConnection httpConn = (HttpURLConnection) conn;
             httpConn.setAllowUserInteraction(false);
             httpConn.setInstanceFollowRedirects(true);
@@ -41,31 +38,27 @@ public class CustomListAdapter  extends ArrayAdapter<String> {
             if (response == HttpURLConnection.HTTP_OK) {
                 in = httpConn.getInputStream();
             }
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             throw new IOException("Error connecting");
         }
         return in;
     }
 
 
-
-    private  MainActivity context;
-    private  String[] prod_name;
-    private  String [] prod_price;
-    private  String [] prod_image;
-
+    private MainActivity context;
+    private String[] prod_name;
+    private String[] prod_price;
+    private String[] prod_image;
 
 
-    public CustomListAdapter(MainActivity context, String[] prod_name, String[] prod_price) {
+    public CustomListAdapter(MainActivity context, String[] prod_name, String[] prod_price, String [] prod_image) {
         super(context, R.layout.mylist, prod_name);
         // TODO Auto-generated constructor stub
 
-        this.context=context;
-        this.prod_name=prod_name;
-        this.prod_price=prod_price;
-        this.prod_image=prod_image;
+        this.context = context;
+        this.prod_name = prod_name;
+        this.prod_price = prod_price;
+        this.prod_image = prod_image;
 
     }
 
@@ -74,11 +67,14 @@ public class CustomListAdapter  extends ArrayAdapter<String> {
         final View rowView = inflater.inflate(R.layout.mylist, null, true);
 
         TextView txtTitle = (TextView) rowView.findViewById(R.id.item);
-        final ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
+        final ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView);
         TextView extratxt = (TextView) rowView.findViewById(R.id.textView1);
 
         txtTitle.setText(prod_name[position]);
         extratxt.setText("Price: $" + prod_price[position]);
+        Glide.with(context)
+                .load(prod_image[position])
+                .into(imageView);
         //imageView.setImageBitmap();
 
         //-------------------------------------------------------------------------
