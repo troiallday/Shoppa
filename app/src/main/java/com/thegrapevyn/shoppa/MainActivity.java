@@ -1,13 +1,9 @@
 package com.thegrapevyn.shoppa;
 
-import android.app.ListActivity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ImageView;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -18,17 +14,21 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class MainActivity extends AppCompatActivity {
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
-    private InputStream OpenHttpConnection(String urlString) throws IOException
-    {
+public class MainActivity extends AppCompatActivity {
+    private static final String LOG_TAG = "MainActivity";
+    private OkHttpClient mClient;
+
+    private InputStream OpenHttpConnection(String urlString) throws IOException {
         InputStream in = null;
         int response = -1;
         URL url = new URL(urlString);
         URLConnection conn = url.openConnection();
         if (!(conn instanceof HttpURLConnection))
             throw new IOException("Not an HTTP connection");
-        try{
+        try {
             HttpURLConnection httpConn = (HttpURLConnection) conn;
             httpConn.setAllowUserInteraction(false);
             httpConn.setInstanceFollowRedirects(true);
@@ -38,17 +38,14 @@ public class MainActivity extends AppCompatActivity {
             if (response == HttpURLConnection.HTTP_OK) {
                 in = httpConn.getInputStream();
             }
-        }
-        catch (Exception ex)
-        {
+        } catch (Exception ex) {
             throw new IOException("Error connecting");
         }
         return in;
     }
 
 
-    private String DownloadText(String URL)
-    {
+    private String DownloadText(String URL) {
         int BUFFER_SIZE = 2000;
         InputStream in = null;
         try {
@@ -64,8 +61,7 @@ public class MainActivity extends AppCompatActivity {
         String str = "";
         char[] inputBuffer = new char[BUFFER_SIZE];
         try {
-            while ((charRead = isr.read(inputBuffer))>0)
-            {
+            while ((charRead = isr.read(inputBuffer)) > 0) {
 //---convert the chars to a String---
                 String readString = String.copyValueOf(inputBuffer, 0, charRead);
                 str += readString;
@@ -93,54 +89,47 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String all_products) {
-
-
-
-            if(!all_products.equals("")){
+            if (!all_products.equals("")) {
                 String[] one_product_line = all_products.split("<br>");
 
-                int x,y;
-                String prod_names[]=new String[one_product_line.length];
-                String prod_prices[]=new String[one_product_line.length];
-                String prod_images[]=new String[one_product_line.length];
+                int x, y;
+                String prod_names[] = new String[one_product_line.length];
+                String prod_prices[] = new String[one_product_line.length];
+                String prod_images[] = new String[one_product_line.length];
 
-                for(x=0; x<one_product_line.length; x++) {
-
-
+                for (x = 0; x < one_product_line.length; x++) {
                     String one_products_string = one_product_line[x];
                     String[] one_products_details = one_products_string.split("%%");
-                    prod_names[x] = one_products_details[0];
-                    prod_prices[x] = one_products_details[1];
-                    prod_images[x] = one_products_details[2];
-
+                    if (one_products_details.length > 3) {
+                        prod_names[x] = one_products_details[0];
+                        prod_prices[x] = one_products_details[1];
+                        prod_images[x] = "http://www.thegrapevyn.com/"+  one_products_details[2];
+                        Log.d(LOG_TAG, "onPostExecute: "+ prod_images[x]);
+                    }
                 }
-
-
-
-
-
-
-                    CustomListAdapter adapter = new CustomListAdapter(MainActivity.this, prod_names, prod_prices);
-                    ListView list = (ListView) findViewById(android.R.id.list);
-                    list.setAdapter(adapter);
-
-
+                CustomListAdapter adapter = new CustomListAdapter(MainActivity.this, prod_names, prod_prices, prod_images);
+                ListView list = (ListView) findViewById(android.R.id.list);
+                list.setAdapter(adapter);
             }
-
-
         }
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new BackgroundThings().execute("http://192.168.1.2/troi_one/get_products2.php");
+        mClient = new OkHttpClient();
 
-        ListView list =(ListView)findViewById(android.R.id.list);
 
+        new BackgroundThings().execute("http://www.thegrapevyn.com/get_products_live.php");
+
+        ListView list = (ListView) findViewById(android.R.id.list);
+    }
+
+    private Request buildRequest(String url) {
+        return new Request.Builder()
+                .url(url)
+                .build();
     }
 }
-
