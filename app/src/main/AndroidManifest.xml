@@ -1,21 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.thegrapevyn.shoppa">
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
+        android:name=".StartInBackground"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/cart"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".FirstMainActivity">
+            <intent-filter>
+                <action android:name="com.thegrapevyn.FirstMainActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="com.thegrapevyn.MainActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".DailyOffer"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="com.thegrapevyn.DailyOffer" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Full_Details">
+            <intent-filter>
+                <action android:name="com.thegrapevyn.Full_Details" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TodaysOffer"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="com.thegrapevyn.TodaysOffer" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Search" />
+        <activity android:name=".CustomMenuActivity" />
+        <activity android:name=".Cart">
+            <intent-filter>
+                <action android:name="com.thegrapevyn.Cart" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Settings" />
+        <activity android:name=".Account">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <action android:name="com.thegrapevyn.Account" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Register">
+            <intent-filter>
+                <action android:name="com.thegrapevyn.Register" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".LoggedIn">
+            <intent-filter>
+                <action android:name="com.thegrapevyn.LoggedIn" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Feedback" />
+        <activity android:name=".BeaconBusiness"></activity>
     </application>
 
 </manifest>
